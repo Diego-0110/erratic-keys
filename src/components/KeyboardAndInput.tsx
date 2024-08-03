@@ -1,6 +1,8 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import {
+  useLayoutEffect, useRef, useState,
+} from 'react';
 import Key from './Key';
 
 const keyboardConfig: Record<string, { value: string, shiftValue?: string }> = {
@@ -22,9 +24,14 @@ const keyboardConfig: Record<string, { value: string, shiftValue?: string }> = {
 };
 
 export default function KeyboardAndInput() {
-  const replacements = useRef<(string | null)>(null);
-  const [inputValue, setInputValue] = useState<string>('');
+  const replacement = useRef<(string | null)>(null);
+  const cursor = useRef({
+    start: 0,
+    end: 0,
+  });
   const inputRef = useRef<HTMLInputElement>(null);
+  const [inputValue, setInputValue] = useState<string>('');
+
   const handleKeyDown = (evt: React.KeyboardEvent) => {
     const obj = {
       evt: 'keydown',
@@ -35,23 +42,41 @@ export default function KeyboardAndInput() {
     console.log(obj);
     if (evt.code in keyboardConfig) {
       if (evt.shiftKey) {
-        replacements.current = keyboardConfig[evt.code].shiftValue
+        replacement.current = keyboardConfig[evt.code].shiftValue
           || keyboardConfig[evt.code].value;
       } else {
-        replacements.current = keyboardConfig[evt.code].value;
+        replacement.current = keyboardConfig[evt.code].value;
       }
     } else {
-      replacements.current = null;
+      replacement.current = null;
     }
   };
   const handleChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(replacements.current);
-    if (replacements.current === null) {
+    console.log(replacement.current);
+    cursor.current.start = evt.target.selectionStart as number;
+    cursor.current.end = evt.target.selectionEnd as number;
+    console.log('change', cursor.current);
+    if (replacement.current === null) {
       setInputValue(evt.target.value);
     } else {
-      setInputValue((v) => v + replacements.current);
+      const start = cursor.current.start - 1;
+      const end = cursor.current.end - 1;
+      cursor.current.start += replacement.current.length - 1;
+      cursor.current.end += replacement.current.length - 1;
+      // TODO use selectionStart for selection and textarea
+      setInputValue((v) => [v.substring(0, start),
+        replacement.current,
+        v.substring(end)].join(''));
     }
   };
+
+  useLayoutEffect(() => {
+    console.log('effect', cursor.current);
+    inputRef.current?.setSelectionRange(
+      cursor.current.start,
+      cursor.current.end,
+    );
+  }, [inputValue]);
 
   const handleClick = () => {
     console.log('event');
