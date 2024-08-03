@@ -1,4 +1,4 @@
-import KeyboardAndInput from "@/components/KeyboardAndInput"
+import KeyboardAndInput from '@/components/KeyboardAndInput';
 
 export default function Home() {
   return (
@@ -6,5 +6,5 @@ export default function Home() {
       {/* <p className="font-bol">AAA</p> */}
       <KeyboardAndInput />
     </main>
-  )
-};
+  );
+}
