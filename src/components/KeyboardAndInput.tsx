@@ -24,13 +24,18 @@ const keyboardConfig: Record<string, { value: string, shiftValue?: string }> = {
 };
 
 export default function KeyboardAndInput() {
+  // string (replace default with this) or null (use default input character)
   const replacement = useRef<(string | null)>(null);
+  // Cursor position inside input
   const cursor = useRef({
     start: 0,
     end: 0,
   });
-  const inputRef = useRef<HTMLInputElement>(null);
-  const [inputValue, setInputValue] = useState<string>('');
+  // replacement and cursor are used for communication between events
+  // Since those events are executed in the same order always, there's no need
+  //  for locks
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const [textareaValue, setTextareaValue] = useState<string>('');
 
   const handleKeyDown = (evt: React.KeyboardEvent) => {
     const obj = {
@@ -41,30 +46,39 @@ export default function KeyboardAndInput() {
     };
     console.log(obj);
     if (evt.code in keyboardConfig) {
+      // Default character input needs to be replaced
       if (evt.shiftKey) {
         replacement.current = keyboardConfig[evt.code].shiftValue
           || keyboardConfig[evt.code].value;
       } else {
         replacement.current = keyboardConfig[evt.code].value;
       }
-    } else {
+    } else { // Use default input
       replacement.current = null;
     }
   };
-  const handleChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(replacement.current);
+  const handleBeforeInput = (evt: React.ChangeEvent<HTMLTextAreaElement>) => {
+    // Save cursor position before update (before input)
+    // Browsers update the cursor position after changing the input's value, so
+    //  when Change event is emitted the cursor position was already updated
+    console.log(evt.target.selectionStart, evt.target.selectionEnd);
     cursor.current.start = evt.target.selectionStart as number;
     cursor.current.end = evt.target.selectionEnd as number;
+  };
+  const handleChange = (evt: React.ChangeEvent<HTMLTextAreaElement>) => {
+    console.log(replacement.current);
     console.log('change', cursor.current);
-    if (replacement.current === null) {
-      setInputValue(evt.target.value);
-    } else {
-      const start = cursor.current.start - 1;
-      const end = cursor.current.end - 1;
-      cursor.current.start += replacement.current.length - 1;
-      cursor.current.end += replacement.current.length - 1;
-      // TODO use selectionStart for selection and textarea
-      setInputValue((v) => [v.substring(0, start),
+    if (replacement.current === null) { // Use default input
+      cursor.current.start = evt.target.selectionStart as number;
+      cursor.current.end = evt.target.selectionEnd as number;
+      setTextareaValue(evt.target.value);
+    } else { // Ignore default input and insert a custom string
+      const { start, end } = cursor.current;
+      // Cursor positionated after string inserted
+      cursor.current.start += replacement.current.length;
+      cursor.current.end = cursor.current.start;
+      // If cursor was selecting text, replace it
+      setTextareaValue((v) => [v.substring(0, start),
         replacement.current,
         v.substring(end)].join(''));
     }
@@ -72,30 +86,25 @@ export default function KeyboardAndInput() {
 
   useLayoutEffect(() => {
     console.log('effect', cursor.current);
-    inputRef.current?.setSelectionRange(
+    // Update the real cursor position before browser repaints the screen
+    // Only necessary when textare value is updated
+    textareaRef.current?.setSelectionRange(
       cursor.current.start,
       cursor.current.end,
     );
-  }, [inputValue]);
-
-  const handleClick = () => {
-    console.log('event');
-    console.log(new KeyboardEvent('keydown', { code: 'KeyA' }));
-    inputRef.current?.dispatchEvent(new KeyboardEvent('keydown', { code: 'KeyA' }));
-  };
+  }, [textareaValue]);
 
   return (
-    <section>
-      <input
+    <section className="w-full">
+      <textarea
         className="mb-2 px-2 py-1 border-2 border-slate-200 rounded-sm"
-        type="text"
-        value={inputValue}
+        value={textareaValue}
         onKeyDown={handleKeyDown}
+        onBeforeInput={handleBeforeInput}
         onChange={handleChange}
-        ref={inputRef}
+        ref={textareaRef}
       />
       <Key />
-      <button type="button" onClick={handleClick}>Click</button>
     </section>
   );
 }
