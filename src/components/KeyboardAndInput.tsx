@@ -4,8 +4,9 @@ import {
   useLayoutEffect, useRef, useState,
 } from 'react';
 import Key from './Key';
+import { KeyboardConfig } from '@/types';
 
-const keyboardConfig: Record<string, { value: string, shiftValue?: string }> = {
+const keyboardConfig: KeyboardConfig = {
   KeyA: {
     value: '😀',
     shiftValue: '😁',
@@ -62,6 +63,7 @@ export default function KeyboardAndInput() {
     // Browsers update the cursor position after changing the input's value, so
     //  when Change event is emitted the cursor position was already updated
     console.log(evt.target.selectionStart, evt.target.selectionEnd);
+    // console.log('beforeInput', 'data' in evt && evt.data as string);
     cursor.current.start = evt.target.selectionStart as number;
     cursor.current.end = evt.target.selectionEnd as number;
   };
