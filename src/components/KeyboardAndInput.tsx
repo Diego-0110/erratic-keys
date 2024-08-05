@@ -6,7 +6,7 @@ import {
 import Key from './Key';
 import { KeyboardConfig } from '@/types';
 
-const keyboardConfig: KeyboardConfig = {
+export const dfKeyboardConfig: KeyboardConfig = {
   KeyA: {
     value: '😀',
     shiftValue: '😁',
@@ -24,7 +24,11 @@ const keyboardConfig: KeyboardConfig = {
   },
 };
 
-export default function KeyboardAndInput() {
+interface Props {
+  keyboardConfig: KeyboardConfig
+}
+
+export default function KeyboardAndInput({ keyboardConfig }: Props) {
   // string (replace default with this) or null (use default input character)
   const replacement = useRef<(string | null)>(null);
   // Cursor position inside input
@@ -99,7 +103,7 @@ export default function KeyboardAndInput() {
   return (
     <section className="w-full">
       <textarea
-        className="mb-2 px-2 py-1 border-2 border-slate-200 rounded-sm"
+        className="mb-2 w-full px-2 py-1 border-2 border-slate-200 rounded-sm"
         value={textareaValue}
         onKeyDown={handleKeyDown}
         onBeforeInput={handleBeforeInput}
