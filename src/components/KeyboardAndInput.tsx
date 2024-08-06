@@ -47,7 +47,8 @@ export default function KeyboardAndInput({ keyboardConfig }: Props) {
       evt: 'keydown',
       key: evt.key,
       code: evt.code,
-      altKey: evt.altKey,
+      shiftKey: evt.shiftKey,
+      capsLock: evt.getModifierState('CapsLock'),
     };
     console.log(obj);
     if (evt.code in keyboardConfig) {

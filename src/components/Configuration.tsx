@@ -13,14 +13,30 @@ interface KeyData {
 }
 
 export default function Configuration({ keyboardConfig, setKeyConfig }: Props) {
+  // TODO Caps Lock
   const [keyData, setKeyData] = useState<null | KeyData>(null);
   const [value, setValue] = useState<string>('');
+  const [alts, setAlts] = useState<{ shift: boolean }>({ shift: false });
+  const [shiftValue, setShiftValue] = useState<string>('');
   const handleKeyDown = (evt: React.KeyboardEvent<HTMLElement>) => {
     setKeyData({ code: evt.code });
+    if (evt.code in keyboardConfig) {
+      setValue(keyboardConfig[evt.code].value);
+      setShiftValue(keyboardConfig[evt.code].shiftValue || '');
+    } else {
+      setValue('');
+      setShiftValue('');
+    }
   };
-  const handleSetValue = () => {
+  const handleUpdateKeyConfig = () => {
     if (keyData) {
-      setKeyConfig(keyData.code, { value });
+      const keyConfig: KeyConfig = {
+        value,
+      };
+      if (alts.shift) {
+        keyConfig.shiftValue = shiftValue;
+      }
+      setKeyConfig(keyData.code, keyConfig);
     }
   };
   useEffect(() => {
@@ -44,7 +60,31 @@ export default function Configuration({ keyboardConfig, setKeyConfig }: Props) {
           onChange={(evt) => setValue(evt.target.value)}
           disabled={!keyData}
         />
-        <button type="button" className="px-2 font-semibold text-slate-950 bg-slate-200 rounded-sm" onClick={handleSetValue}>Set Value</button>
+        <div>
+          <button
+            type="button"
+            className="px-2 font-semibold text-slate-950 bg-slate-200 rounded-sm"
+            onClick={() => setAlts((a) => ({ ...a, shift: !a.shift }))}
+          >
+            Shift Value
+          </button>
+          {alts.shift
+          && (
+          <input
+            type="text"
+            className="mb-2 w-full px-2 py-1 border-2 border-slate-200 rounded-sm"
+            value={shiftValue}
+            onChange={(evt) => setShiftValue(evt.target.value)}
+          />
+          )}
+        </div>
+        <button
+          type="button"
+          className="px-2 font-semibold text-slate-950 bg-slate-200 rounded-sm"
+          onClick={handleUpdateKeyConfig}
+        >
+          Set Value
+        </button>
       </div>
     </section>
   );
