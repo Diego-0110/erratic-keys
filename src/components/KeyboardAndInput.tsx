@@ -3,8 +3,8 @@
 import {
   useLayoutEffect, useRef, useState,
 } from 'react';
-import Key from './Key';
 import { KeyboardConfig } from '@/types';
+import KeyNotification, { KeyNotificationInfo } from './KeyNotification';
 
 export const dfKeyboardConfig: KeyboardConfig = {
   KeyA: {
@@ -28,6 +28,14 @@ interface Props {
   keyboardConfig: KeyboardConfig
 }
 
+function debounce(func: () => void, timeout: number) {
+  let timeId: ReturnType<typeof setTimeout>;
+  return () => {
+    clearTimeout(timeId);
+    timeId = setTimeout(func, timeout);
+  };
+}
+
 export default function KeyboardAndInput({ keyboardConfig }: Props) {
   // string (replace default with this) or null (use default input character)
   const replacement = useRef<(string | null)>(null);
@@ -41,6 +49,11 @@ export default function KeyboardAndInput({ keyboardConfig }: Props) {
   //  for locks
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [textareaValue, setTextareaValue] = useState<string>('');
+
+  const [keyPressInfo, setKeyPressInfo] = useState<KeyNotificationInfo | null>(null);
+  const debouncedClearKeyPressInfo = useRef<() => void>(debounce(() => {
+    setKeyPressInfo(null);
+  }, 2000)); // TODO vanish animation
 
   const handleKeyDown = (evt: React.KeyboardEvent) => {
     const obj = {
@@ -62,6 +75,8 @@ export default function KeyboardAndInput({ keyboardConfig }: Props) {
     } else { // Use default input
       replacement.current = null;
     }
+    setKeyPressInfo({ keyCode: evt.code });
+    debouncedClearKeyPressInfo.current();
   };
   const handleBeforeInput = (evt: React.ChangeEvent<HTMLTextAreaElement>) => {
     // Save cursor position before update (before input)
@@ -111,7 +126,7 @@ export default function KeyboardAndInput({ keyboardConfig }: Props) {
         onChange={handleChange}
         ref={textareaRef}
       />
-      <Key />
+      {keyPressInfo && <KeyNotification keyInfo={keyPressInfo} />}
     </section>
   );
 }
