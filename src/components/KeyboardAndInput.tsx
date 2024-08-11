@@ -5,6 +5,7 @@ import {
 } from 'react';
 import { KeyboardConfig } from '@/types';
 import KeyNotification, { KeyNotificationInfo } from './KeyNotification';
+import Textarea from './Textarea';
 
 export const dfKeyboardConfig: KeyboardConfig = {
   KeyA: {
@@ -56,14 +57,13 @@ export default function KeyboardAndInput({ keyboardConfig }: Props) {
   }, 2000)); // TODO vanish animation
 
   const handleKeyDown = (evt: React.KeyboardEvent) => {
-    const obj = {
-      evt: 'keydown',
-      key: evt.key,
+    const newKPInfo: KeyNotificationInfo = {
       code: evt.code,
+      key: evt.key,
       shiftKey: evt.shiftKey,
       capsLock: evt.getModifierState('CapsLock'),
     };
-    console.log(obj);
+    console.log('keydown', newKPInfo);
     if (evt.code in keyboardConfig) {
       // Default character input needs to be replaced
       if (evt.shiftKey) {
@@ -75,7 +75,10 @@ export default function KeyboardAndInput({ keyboardConfig }: Props) {
     } else { // Use default input
       replacement.current = null;
     }
-    setKeyPressInfo({ keyCode: evt.code });
+    if (replacement.current !== null) {
+      newKPInfo.replacement = replacement.current;
+    }
+    setKeyPressInfo(newKPInfo);
     debouncedClearKeyPressInfo.current();
   };
   const handleBeforeInput = (evt: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -117,9 +120,8 @@ export default function KeyboardAndInput({ keyboardConfig }: Props) {
   }, [textareaValue]);
 
   return (
-    <section className="w-full">
-      <textarea
-        className="mb-2 w-full px-2 py-1 border-2 border-slate-200 rounded-sm"
+    <section className="w-full max-w-4xl">
+      <Textarea
         value={textareaValue}
         onKeyDown={handleKeyDown}
         onBeforeInput={handleBeforeInput}

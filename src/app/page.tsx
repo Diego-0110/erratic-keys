@@ -11,7 +11,7 @@ export default function Home() {
     setKeyboardConfig({ ...keyboardConfig, [keyCode]: keyConfig });
   };
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
+    <main className="flex min-h-screen flex-col items-center justify-between p-4 font-mono text-slate-200 bg-slate-950">
       <KeyboardAndInput keyboardConfig={keyboardConfig} />
       <Configuration keyboardConfig={keyboardConfig} setKeyConfig={setKeyConfig} />
     </main>
