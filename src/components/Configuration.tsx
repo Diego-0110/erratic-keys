@@ -29,13 +29,18 @@ export default function Configuration({ keyboardConfig, setKeyConfig }: Props) {
     if (evt.code in keyboardConfig) {
       setValue(keyboardConfig[evt.code].value);
       setShiftValue(keyboardConfig[evt.code].shiftValue || '');
+      setAlts({
+        value: true,
+        shift: typeof keyboardConfig[evt.code].shiftValue === 'string',
+      });
     } else {
       setValue('');
       setShiftValue('');
+      setAlts({ value: false, shift: false });
     }
   };
   const handleUpdateKeyConfig = () => {
-    if (keyData) {
+    if (keyData) { // TODO remove key if null
       const keyConfig: KeyConfig = {
         value,
       };
@@ -49,9 +54,9 @@ export default function Configuration({ keyboardConfig, setKeyConfig }: Props) {
     console.log(keyboardConfig);
   }, [keyboardConfig]);
   return (
-    <section className="flex w-full bg-slate-950 border border-slate-700 rounded-md">
+    <section className="flex w-full max-w-5xl m-auto border-[.1em] border-slate-600 rounded-md overflow-hidden">
       <div
-        className="flex-1 flex justify-center items-center p-4 bg-slate-600"
+        className="flex-1 flex justify-center items-center p-4 bg-slate-800"
         role="presentation"
         // TODO use button instead
         // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
@@ -63,15 +68,26 @@ export default function Configuration({ keyboardConfig, setKeyConfig }: Props) {
       <div className="flex-1 p-4">
         <GroupOptions>
           <Option
-            initialState={Boolean(keyData)}
-            onChange={(state) => console.log(state)}
+            initialState={alts.value}
+            onChange={() => {
+              if (alts.value) {
+                setAlts({ shift: false, value: false });
+              } else {
+                setAlts((a) => ({ ...a, value: !a.value }));
+              }
+              setValue('');
+            }}
+            condition={() => Boolean(keyData)}
           >
             Value
           </Option>
-          <Option onChange={() => {
-            setAlts((a) => ({ ...a, shift: !a.shift }));
-            setShiftValue('');
-          }}
+          <Option
+            initialState={alts.shift}
+            onChange={() => {
+              setAlts((a) => ({ ...a, shift: !a.shift }));
+              setShiftValue('');
+            }}
+            condition={() => Boolean(keyData) && alts.value}
           >
             Shift Value
           </Option>
@@ -81,7 +97,7 @@ export default function Configuration({ keyboardConfig, setKeyConfig }: Props) {
           id="value"
           value={value}
           onChange={(evt) => setValue(evt.target.value)}
-          disabled={!keyData}
+          disabled={!alts.value}
         />
         <InputLabel
           label="Shift Value"
@@ -90,7 +106,12 @@ export default function Configuration({ keyboardConfig, setKeyConfig }: Props) {
           onChange={(evt) => setShiftValue(evt.target.value)}
           disabled={!alts.shift}
         />
-        <Button onClick={handleUpdateKeyConfig}>Set Value</Button>
+        <Button
+          onClick={handleUpdateKeyConfig}
+          disabled={!keyData}
+        >
+          Set Value
+        </Button>
       </div>
     </section>
   );

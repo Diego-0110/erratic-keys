@@ -13,7 +13,9 @@ export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-4 font-mono text-slate-200 bg-slate-950">
       <KeyboardAndInput keyboardConfig={keyboardConfig} />
-      <Configuration keyboardConfig={keyboardConfig} setKeyConfig={setKeyConfig} />
+      <div className="bg-slate-900 absolute bottom-0 left-0 right-0 max-h-[50vh] overflow-auto p-2 pt-8 rounded-t-lg border-t-[.1em] border-x-[.1em] border-slate-600">
+        <Configuration keyboardConfig={keyboardConfig} setKeyConfig={setKeyConfig} />
+      </div>
     </main>
   );
 }

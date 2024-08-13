@@ -1,3 +1,4 @@
+import { SwapVertIcon } from './icons';
 import Key from './Key';
 
 export interface KeyNotificationInfo {
@@ -32,7 +33,7 @@ export default function KeyNotification({ keyInfo }: Props) {
       </div>
       {keyInfo.replacement !== undefined && (
       <>
-        <p>⬇️</p>
+        <SwapVertIcon className="w-6" />
         <p className="text-blue-400 font-bold">
           &quot;
           {keyInfo.replacement}
