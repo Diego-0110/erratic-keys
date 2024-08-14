@@ -18,6 +18,25 @@
   }
 }
 
+::-webkit-scrollbar {
+  width: .8em;
+  height: .8em;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+/* Handle */
+::-webkit-scrollbar-thumb {
+  border: .2em solid rgba(0, 0, 0, 0);
+  background-clip: padding-box;
+  background-color: theme('colors.slate.500');
+  border-radius: .4em;
+}
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background-color: theme('colors.slate.400');
+}
+
 body {
   color: rgb(var(--foreground-rgb));
   background: linear-gradient(

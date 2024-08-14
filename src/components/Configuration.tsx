@@ -14,7 +14,8 @@ interface Props {
 }
 
 interface KeyData {
-  code: string
+  code: string,
+  key: string
 }
 
 export default function Configuration({ keyboardConfig, setKeyConfig }: Props) {
@@ -25,7 +26,7 @@ export default function Configuration({ keyboardConfig, setKeyConfig }: Props) {
     value: boolean, shift: boolean }>({ value: false, shift: false });
   const [shiftValue, setShiftValue] = useState<string>('');
   const handleKeyDown = (evt: React.KeyboardEvent<HTMLElement>) => {
-    setKeyData({ code: evt.code });
+    setKeyData({ code: evt.code, key: evt.key });
     if (evt.code in keyboardConfig) {
       setValue(keyboardConfig[evt.code].value);
       setShiftValue(keyboardConfig[evt.code].shiftValue || '');
@@ -54,16 +55,19 @@ export default function Configuration({ keyboardConfig, setKeyConfig }: Props) {
     console.log(keyboardConfig);
   }, [keyboardConfig]);
   return (
-    <section className="flex w-full max-w-5xl m-auto border-[.1em] border-slate-600 rounded-md overflow-hidden">
+    <section className="flex w-full border-[.1em] border-slate-600 rounded-md overflow-hidden">
       <div
-        className="flex-1 flex justify-center items-center p-4 bg-slate-800"
+        className="flex-1 flex flex-col gap-1 justify-center items-center p-4 bg-slate-800"
         role="presentation"
         // TODO use button instead
         // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
         tabIndex={0}
         onKeyDown={handleKeyDown}
       >
-        <Key keyStr={keyData ? keyData.code : 'No key'} />
+        <Key keyStr={keyData ? keyData.key : '??'} />
+        <span className="px-2 text-sm bg-slate-600 rounded-md">
+          {keyData ? keyData.code : 'No key'}
+        </span>
       </div>
       <div className="flex-1 p-4">
         <GroupOptions>
