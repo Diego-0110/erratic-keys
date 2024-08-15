@@ -8,41 +8,45 @@ interface Props {
 }
 export default function KeyConfigCard({ keyCode, keyConfig }: Props) {
   return (
-    <div className="flex w-full border-[.1em] border-slate-600 rounded-md overflow-hidden">
+    <div className="flex max-sm:flex-col w-full border-[.1em] border-slate-600 rounded-md overflow-hidden">
       <div
-        className="flex flex-col gap-1 justify-center items-center p-2 px-6 bg-slate-800 border-r-[.1em] border-slate-600"
+        className="flex flex-col gap-1 justify-center items-center p-2 px-5 bg-slate-800 sm:border-r-[.1em] max-sm:border-b-[.1em] border-slate-600"
       >
         <Key keyStr="A" />
         <span className="px-2 text-sm bg-slate-600 rounded-md">
           {keyCode}
         </span>
       </div>
-      <div className="flex-1 flex flex-col">
-        <div className="flex flex-1 border-b-[.05em] border-slate-600">
-          <div className="flex items-center p-2 px-3 bg-slate-800 border-r-[.1em] border-slate-600">
-            <span className="block w-6 h-6 mb-[.2em] bg-slate-300 shadow-[0_0.2em_white] shadow-slate-500 rounded-sm" />
-          </div>
-          <div className="flex items-center p-2 px-3 text-blue-400 font-semibold">
-            <p>{keyConfig.value}</p>
-          </div>
-        </div>
-        {keyConfig.shiftValue !== undefined && (
-        <div className="flex flex-1 border-t-[.05em] border-slate-600">
-          <div className="flex items-center gap-1 p-2 px-3 bg-slate-800 border-r-[.1em] border-slate-600">
-            <span
-              className="block p-1 mb-[.2em] text-slate-900 text-xs font-semibold bg-slate-300 shadow-[0_0.2em_white] shadow-slate-500 rounded-sm"
-            >
-              <ShiftIcon className="w-4" />
-            </span>
-            <span>+</span>
-            <span className="block w-6 h-6 mb-[.2em] bg-slate-300 shadow-[0_0.2em_white] shadow-slate-500 rounded-sm" />
-          </div>
-          <div className="flex items-center p-2 px-3 text-blue-400 font-semibold">
-            <p>{keyConfig.shiftValue}</p>
-          </div>
-        </div>
-        )}
-      </div>
+      <table className="flex-1">
+        <tbody className="divide-y-[.1em] divide-slate-600">
+          <tr className="divide-x-[.1em] divide-slate-600">
+            <td className="p-2 px-3 bg-slate-800">
+              <span className="block w-6 h-6 mx-auto mb-[.2em] bg-slate-300 shadow-[0_0.2em_white] shadow-slate-500 rounded-sm" />
+            </td>
+            <td className="p-2 px-3 w-full">
+              <p className="text-blue-400 font-semibold">{keyConfig.value}</p>
+            </td>
+          </tr>
+          {keyConfig.shiftValue !== undefined && (
+          <tr className="divide-x-[.1em] divide-slate-600">
+            <td className="p-2 px-3 bg-slate-800">
+              <div className="flex gap-2">
+                <span
+                  className="inline-block p-1 mb-[.2em] text-slate-900 text-xs font-semibold bg-slate-300 shadow-[0_0.2em_white] shadow-slate-500 rounded-sm"
+                >
+                  <ShiftIcon className="w-4" />
+                </span>
+                <span className="inline-block">+</span>
+                <span className="inline-block w-6 h-6 mb-[.2em] bg-slate-300 shadow-[0_0.2em_white] shadow-slate-500 rounded-sm" />
+              </div>
+            </td>
+            <td className="p-2 px-3 w-full">
+              <p className="text-blue-400 font-semibold">{keyConfig.shiftValue}</p>
+            </td>
+          </tr>
+          )}
+        </tbody>
+      </table>
     </div>
   );
 }

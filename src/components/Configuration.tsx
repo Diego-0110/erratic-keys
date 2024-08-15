@@ -10,7 +10,7 @@ import Option from './Option';
 
 interface Props {
   keyboardConfig: KeyboardConfig,
-  setKeyConfig: (keyCode: string, keyConfig: KeyConfig) => void
+  setKeyConfig: (keyCode: string, keyConfig: KeyConfig | null) => void
 }
 
 interface KeyData {
@@ -41,7 +41,11 @@ export default function Configuration({ keyboardConfig, setKeyConfig }: Props) {
     }
   };
   const handleUpdateKeyConfig = () => {
-    if (keyData) { // TODO remove key if null
+    if (keyData) {
+      if (!alts.value) {
+        setKeyConfig(keyData.code, null);
+        return;
+      }
       const keyConfig: KeyConfig = {
         value,
       };
@@ -55,9 +59,9 @@ export default function Configuration({ keyboardConfig, setKeyConfig }: Props) {
     console.log(keyboardConfig);
   }, [keyboardConfig]);
   return (
-    <section className="flex w-full border-[.1em] border-slate-600 rounded-md overflow-hidden">
+    <section className="flex max-sm:flex-col w-full border-[.1em] border-slate-600 rounded-md overflow-hidden">
       <div
-        className="flex-1 flex flex-col gap-1 justify-center items-center p-4 bg-slate-800"
+        className="flex-1 flex flex-col gap-1 justify-center items-center p-4 bg-slate-800 sm:border-r-[.1em] max-sm:border-b-[.1em] border-slate-600"
         role="presentation"
         // TODO use button instead
         // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
@@ -69,13 +73,14 @@ export default function Configuration({ keyboardConfig, setKeyConfig }: Props) {
           {keyData ? keyData.code : 'No key'}
         </span>
       </div>
-      <div className="flex-1 p-4">
+      <div className="flex-1 min-w-[28em] max-sm:min-w-full p-4">
         <GroupOptions>
           <Option
             initialState={alts.value}
             onChange={() => {
               if (alts.value) {
                 setAlts({ shift: false, value: false });
+                setShiftValue('');
               } else {
                 setAlts((a) => ({ ...a, value: !a.value }));
               }
@@ -114,7 +119,7 @@ export default function Configuration({ keyboardConfig, setKeyConfig }: Props) {
           onClick={handleUpdateKeyConfig}
           disabled={!keyData}
         >
-          Set Value
+          Update
         </Button>
       </div>
     </section>

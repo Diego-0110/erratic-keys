@@ -35,11 +35,10 @@ export function ShiftIcon(props: Props) {
   );
 }
 
-export function DoubleArrowIcon(props: Props) {
+export function ArrowDownIcon(props: Props) {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" {...props} width="32" fill="currentColor" viewBox="0 0 24 24">
-      <path d="M6 17.59L7.41 19L12 14.42L16.59 19L18 17.59l-6-6z" />
-      <path d="m6 11l1.41 1.41L12 7.83l4.59 4.58L18 11l-6-6z" />
+      <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6l-6-6z" />
     </svg>
   );
 }

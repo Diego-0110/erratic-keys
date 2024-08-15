@@ -27,7 +27,7 @@
 }
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  border: .2em solid rgba(0, 0, 0, 0);
+  border: .225em solid rgba(0, 0, 0, 0);
   background-clip: padding-box;
   background-color: theme('colors.slate.500');
   border-radius: .4em;
@@ -50,5 +50,8 @@ body {
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+  .flip-h {
+    transform: rotateX(0.5turn);
   }
 }

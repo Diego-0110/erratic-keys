@@ -4,7 +4,7 @@ interface CustomProps {
 
 type Props = CustomProps & React.ButtonHTMLAttributes<HTMLButtonElement>;
 
-const activeStyles = 'bg-sky-400 text-slate-900 hover:opacity-90';
+const activeStyles = 'bg-blue-400 text-slate-900 hover:opacity-90';
 const disableStyles = 'bg-slate-400 text-slate-950';
 
 export default function Button({ children, ...props }: Props) {
