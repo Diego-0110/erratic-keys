@@ -1,14 +1,19 @@
-import { forwardRef, useState } from 'react';
+import {
+  forwardRef, useCallback, useMemo, useState,
+} from 'react';
 import { CheckCopyIcon, CopyIcon } from './icons';
+import { debounce } from '@/utils';
 
 type Props = React.TextareaHTMLAttributes<HTMLTextAreaElement>;
 
 const Textarea = forwardRef((props: Props, ref: React.ForwardedRef<HTMLTextAreaElement>) => {
   const [copyBtnIcon, setCopyBtnIcon] = useState<React.ReactNode>(<CopyIcon className="w-4" />);
+  const aux = useMemo(() => debounce(() => setCopyBtnIcon(<CopyIcon className="w-4" />), 600), [setCopyBtnIcon]);
+  const debouncedClearBtnIcon = useCallback(aux, [aux]);
   const handleClick = () => {
     navigator.clipboard.writeText(props.value as string);
-    setCopyBtnIcon(<CheckCopyIcon className="w-4 fill-blue-400" />);
-    setTimeout(() => setCopyBtnIcon(<CopyIcon className="w-4" />), 600); // TODO debounce
+    setCopyBtnIcon(<CheckCopyIcon className="animate-[bounce_.6s_infinite] w-4 fill-blue-400" />);
+    debouncedClearBtnIcon();
   };
   return (
     <div className="relative">

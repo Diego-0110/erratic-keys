@@ -6,6 +6,10 @@ import {
 import { KeyboardConfig } from '@/types';
 import KeyNotification, { KeyNotificationInfo } from './KeyNotification';
 import Textarea from './Textarea';
+import { debounce } from '@/utils';
+import Option from './Option';
+import { SwapVertIcon } from './icons';
+import useKBStore from '@/store';
 
 export const dfKeyboardConfig: KeyboardConfig = {
   KeyA: {
@@ -25,19 +29,10 @@ export const dfKeyboardConfig: KeyboardConfig = {
   },
 };
 
-interface Props {
-  keyboardConfig: KeyboardConfig
-}
-
-function debounce(func: () => void, timeout: number) {
-  let timeId: ReturnType<typeof setTimeout>;
-  return () => {
-    clearTimeout(timeId);
-    timeId = setTimeout(func, timeout);
-  };
-}
-
-export default function KeyboardAndInput({ keyboardConfig }: Props) {
+export default function KeyboardAndInput() {
+  const keyboardConfig = useKBStore((s) => s.keyboardConfig);
+  const swap = useKBStore((s) => s.config.swap);
+  const toggleSwap = useKBStore((s) => s.toggleSwap);
   // string (replace default with this) or null (use default input character)
   const replacement = useRef<(string | null)>(null);
   // Cursor position inside input
@@ -64,7 +59,7 @@ export default function KeyboardAndInput({ keyboardConfig }: Props) {
       capsLock: evt.getModifierState('CapsLock'),
     };
     console.log('keydown', newKPInfo);
-    if (evt.code in keyboardConfig) {
+    if (swap && evt.code in keyboardConfig) {
       // Default character input needs to be replaced
       if (evt.shiftKey && keyboardConfig[evt.code].shiftValue !== undefined) {
         replacement.current = keyboardConfig[evt.code].shiftValue as string;
@@ -120,6 +115,12 @@ export default function KeyboardAndInput({ keyboardConfig }: Props) {
 
   return (
     <section className="w-full max-w-4xl">
+      <div className="mb-2">
+        <Option initialState onChange={() => toggleSwap()}>
+          <SwapVertIcon className="inline-block w-4" />
+          Swap
+        </Option>
+      </div>
       <Textarea
         value={textareaValue}
         onKeyDown={handleKeyDown}

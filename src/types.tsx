@@ -4,3 +4,7 @@ export interface KeyConfig {
 }
 
 export type KeyboardConfig = Record<string, KeyConfig>;
+
+export interface Config {
+  swap: boolean
+}

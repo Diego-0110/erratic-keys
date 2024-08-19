@@ -1,25 +1,25 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { KeyboardConfig, KeyConfig } from '@/types';
+import { KeyConfig } from '@/types';
 import Key from './Key';
 import InputLabel from './InputLabel';
 import Button from './Button';
 import GroupOptions from './GroupOptions';
 import Option from './Option';
-
-interface Props {
-  keyboardConfig: KeyboardConfig,
-  setKeyConfig: (keyCode: string, keyConfig: KeyConfig | null) => void
-}
+import useKBStore from '@/store';
 
 interface KeyData {
   code: string,
   key: string
 }
 
-export default function Configuration({ keyboardConfig, setKeyConfig }: Props) {
+export default function Configuration() {
   // TODO Caps Lock
+  const keyboardConfig = useKBStore((s) => s.keyboardConfig);
+  const setKeyConfig = useKBStore((s) => s.setKeyConfig);
+  const removeKeyConfig = useKBStore((s) => s.removeKeyConfig);
+
   const [keyData, setKeyData] = useState<null | KeyData>(null);
   const [value, setValue] = useState<string>('');
   const [alts, setAlts] = useState<{
@@ -43,7 +43,7 @@ export default function Configuration({ keyboardConfig, setKeyConfig }: Props) {
   const handleUpdateKeyConfig = () => {
     if (keyData) {
       if (!alts.value) {
-        setKeyConfig(keyData.code, null);
+        removeKeyConfig(keyData.code);
         return;
       }
       const keyConfig: KeyConfig = {
