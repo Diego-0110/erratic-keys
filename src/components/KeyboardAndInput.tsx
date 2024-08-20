@@ -116,7 +116,7 @@ export default function KeyboardAndInput() {
   return (
     <section className="w-full max-w-4xl">
       <div className="mb-2">
-        <Option initialState onChange={() => toggleSwap()}>
+        <Option state={swap} onClick={toggleSwap}>
           <SwapVertIcon className="inline-block w-4" />
           Swap
         </Option>

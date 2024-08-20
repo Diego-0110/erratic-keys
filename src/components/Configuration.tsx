@@ -76,8 +76,8 @@ export default function Configuration() {
       <div className="flex-1 min-w-[28em] max-sm:min-w-full p-4">
         <GroupOptions>
           <Option
-            initialState={alts.value}
-            onChange={() => {
+            state={alts.value}
+            onClick={() => {
               if (alts.value) {
                 setAlts({ shift: false, value: false });
                 setShiftValue('');
@@ -86,17 +86,15 @@ export default function Configuration() {
               }
               setValue('');
             }}
-            condition={() => Boolean(keyData)}
           >
             Value
           </Option>
           <Option
-            initialState={alts.shift}
-            onChange={() => {
+            state={alts.shift}
+            onClick={() => {
               setAlts((a) => ({ ...a, shift: !a.shift }));
               setShiftValue('');
             }}
-            condition={() => Boolean(keyData) && alts.value}
           >
             Shift Value
           </Option>
