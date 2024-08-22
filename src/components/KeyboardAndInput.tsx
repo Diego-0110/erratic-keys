@@ -4,9 +4,8 @@ import {
   useLayoutEffect, useRef, useState,
 } from 'react';
 import { KeyboardConfig } from '@/types';
-import KeyNotification, { KeyNotificationInfo } from './KeyNotification';
+import KeyNotification, { KeyNotificationActions, KeyNotificationInfo } from './KeyNotification';
 import Textarea from './Textarea';
-import { debounce } from '@/utils';
 import Option from './Option';
 import { SwapVertIcon } from './icons';
 import useKBStore from '@/store';
@@ -46,10 +45,7 @@ export default function KeyboardAndInput() {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [textareaValue, setTextareaValue] = useState<string>('');
 
-  const [keyPressInfo, setKeyPressInfo] = useState<KeyNotificationInfo | null>(null);
-  const debouncedClearKeyPressInfo = useRef<() => void>(debounce(() => {
-    setKeyPressInfo(null);
-  }, 2000)); // TODO vanish animation
+  const keyNotificationRef = useRef<KeyNotificationActions>(null);
 
   const handleKeyDown = (evt: React.KeyboardEvent) => {
     const newKPInfo: KeyNotificationInfo = {
@@ -72,8 +68,7 @@ export default function KeyboardAndInput() {
     if (replacement.current !== null) {
       newKPInfo.replacement = replacement.current;
     }
-    setKeyPressInfo(newKPInfo);
-    debouncedClearKeyPressInfo.current();
+    keyNotificationRef.current?.setKeyInfo(newKPInfo);
   };
   const handleBeforeInput = (evt: React.ChangeEvent<HTMLTextAreaElement>) => {
     // Save cursor position before update (before input)
@@ -128,7 +123,7 @@ export default function KeyboardAndInput() {
         onChange={handleChange}
         ref={textareaRef}
       />
-      {keyPressInfo && <KeyNotification keyInfo={keyPressInfo} />}
+      <KeyNotification ref={keyNotificationRef} />
     </section>
   );
 }

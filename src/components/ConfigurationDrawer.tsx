@@ -44,7 +44,7 @@ export default function ConfigurationDrawer() {
         <Configuration />
         <div className="space-y-2">
           <h2 className="text-xl font-bold text-center mb-2 mt-4">Configuration</h2>
-          <div className="flex gap-1">
+          <div className="flex gap-1 flex-wrap">
             <a
               className="hidden"
               href={encodeURI(`data:text/json;charset=utf-8,${JSON.stringify(keyboardConfig)}`)}

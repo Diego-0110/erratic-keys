@@ -24,7 +24,7 @@ export default function KeyConfigCard({ keyCode, keyConfig }: Props) {
               <span className="block w-6 h-6 mx-auto mb-[.2em] bg-slate-300 shadow-[0_0.2em_white] shadow-slate-500 rounded-sm" />
             </td>
             <td className="p-2 px-3 w-full">
-              <p className="text-blue-400 font-semibold">{keyConfig.value}</p>
+              <p className="text-blue-400 font-semibold text-ellipsis overflow-hidden">{keyConfig.value}</p>
             </td>
           </tr>
           {keyConfig.shiftValue !== undefined && (
