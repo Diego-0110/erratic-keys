@@ -7,7 +7,7 @@ interface KBConfigSlice {
   setKBConfig: (newKBConfig: KeyboardConfig) => void,
   setKeyConfig: (keyCode: string, keyConfig: KeyConfig) => void,
   removeKeyConfig: (keyCode: string) => void
-  reset: () => void
+  resetKBConfig: () => void
 }
 
 const createKBConfigSlice: StateCreator<
@@ -24,7 +24,7 @@ KBConfigSlice
     delete newKBConfig[keyCode];
     set({ keyboardConfig: newKBConfig });
   },
-  reset: () => set({ keyboardConfig: {} }),
+  resetKBConfig: () => set({ keyboardConfig: {} }),
 });
 
 interface ConfigSlice {

@@ -9,10 +9,12 @@ import useKBStore from '@/store';
 export default function ConfigurationDrawer() {
   const keyboardConfig = useKBStore((s) => s.keyboardConfig);
   const setKBConfig = useKBStore((s) => s.setKBConfig);
+  const resetKBConfig = useKBStore((s) => s.resetKBConfig);
 
   const [configOpen, setConfigOpen] = useState<boolean>(false);
   const [file, setFile] = useState<File | null>();
   const downloadRef = useRef<HTMLAnchorElement>(null);
+  const inputFileRef = useRef<HTMLInputElement>(null);
   useEffect(() => {
     if (file) {
       const reader = new FileReader();
@@ -40,7 +42,8 @@ export default function ConfigurationDrawer() {
           <ArrowDownIcon className={`w-5 transition-transform${configOpen ? ' flip-h' : ''}`} />
         </button>
       </div>
-      <div className="flex flex-col [&>*]:shrink-0 gap-2 p-2 w-full max-w-4xl m-auto overflow-auto">
+      <div className="relative flex flex-col [&>*]:shrink-0 gap-2 px-2 pb-2 w-full max-w-4xl m-auto overflow-auto">
+        <div className="sticky top-0 left-0 right-0 h-2 bg-gradient-to-b from-slate-900 to-transparent" />
         <Configuration />
         <div className="space-y-2">
           <h2 className="text-xl font-bold text-center mb-2 mt-4">Configuration</h2>
@@ -56,13 +59,25 @@ export default function ConfigurationDrawer() {
             <Button onClick={() => downloadRef.current?.click()}>Save</Button>
             <input
               type="file"
-              className="file:px-4 file:py-1 file:font-semibold file:text-slate-900 file:bg-blue-400 file:hover:opacity-90 file:rounded-md file:border-none file:hover:cursor-pointer"
+              className="max-w-full file:px-4 file:py-1 file:font-semibold file:text-slate-900 file:bg-blue-400 file:hover:opacity-90 file:rounded-md file:border-none file:hover:cursor-pointer"
               onChange={(evt) => {
                 if (evt.target.files) {
                   setFile(evt.target.files[0]);
                 }
               }}
+              ref={inputFileRef}
             />
+            <Button
+              variant="secondary"
+              onClick={() => {
+                resetKBConfig();
+                if (inputFileRef.current) {
+                  inputFileRef.current.value = '';
+                }
+              }}
+            >
+              Reset
+            </Button>
           </div>
           {Object.entries(keyboardConfig)
             .map(([keyCode, keyConfig]) => (

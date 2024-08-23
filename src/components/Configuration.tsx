@@ -61,14 +61,12 @@ export default function Configuration() {
   return (
     <section className="flex max-sm:flex-col w-full border-[.1em] border-slate-600 rounded-md overflow-hidden">
       <div
-        className="flex-1 flex flex-col gap-1 justify-center items-center p-4 bg-slate-800 sm:border-r-[.1em] max-sm:border-b-[.1em] border-slate-600"
-        role="presentation"
-        // TODO use button instead
-        // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
+        className="flex-1 flex flex-col gap-1 justify-center items-center p-4 bg-slate-900 sm:border-r-[.1em] max-sm:border-b-[.1em] border-slate-600 focus:bg-slate-800 outline-none"
+        role="textbox"
         tabIndex={0}
         onKeyDown={handleKeyDown}
       >
-        <Key keyStr={keyData ? keyData.key : '??'} />
+        <Key keyStr={keyData ? keyData.key : '?'} />
         <span className="px-2 text-sm bg-slate-600 rounded-md">
           {keyData ? keyData.code : 'No key'}
         </span>
@@ -78,6 +76,7 @@ export default function Configuration() {
           <Option
             state={alts.value}
             onClick={() => {
+              if (!keyData) return;
               if (alts.value) {
                 setAlts({ shift: false, value: false });
                 setShiftValue('');
@@ -92,8 +91,10 @@ export default function Configuration() {
           <Option
             state={alts.shift}
             onClick={() => {
-              setAlts((a) => ({ ...a, shift: !a.shift }));
-              setShiftValue('');
+              if (alts.value) {
+                setAlts((a) => ({ ...a, shift: !a.shift }));
+                setShiftValue('');
+              }
             }}
           >
             Shift Value

@@ -50,3 +50,11 @@ export function SettingsIcon(props: Props) {
     </svg>
   );
 }
+
+export function CapsLockIcon(props: Props) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" {...props} width="32" fill="currentColor" viewBox="0 0 24 24">
+      <path d="M12 8.41L16.59 13L18 11.59l-6-6l-6 6L7.41 13zM6 18h12v-2H6z" />
+    </svg>
+  );
+}

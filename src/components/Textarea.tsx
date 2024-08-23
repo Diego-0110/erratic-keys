@@ -18,7 +18,7 @@ const Textarea = forwardRef((props: Props, ref: React.ForwardedRef<HTMLTextAreaE
   return (
     <div className="relative">
       <textarea
-        className="p-3 w-full bg-slate-800 border-[.1em] border-slate-600 focus:outline focus:outline-[.125em] focus:outline-offset-[.1em] focus:outline-blue-400 rounded-md"
+        className="p-3 w-full bg-slate-800 border-[.1em] border-slate-600 focus:outline focus:outline-[.125em] focus:outline-offset-[.1em] focus:outline-blue-400 rounded-md [&::-webkit-scrollbar-corner]:bg-transparent"
         rows={4}
       // eslint-disable-next-line react/jsx-props-no-spreading
         {...props}

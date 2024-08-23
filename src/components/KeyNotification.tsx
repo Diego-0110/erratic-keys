@@ -1,7 +1,7 @@
 import {
   forwardRef, useImperativeHandle, useRef, useState,
 } from 'react';
-import { SwapVertIcon } from './icons';
+import { CapsLockIcon, SwapVertIcon } from './icons';
 import Key from './Key';
 import { debounce } from '@/utils';
 
@@ -55,10 +55,15 @@ const KeyNotification = forwardRef((
   const showShift = data.shiftKey === true && data.key !== 'Shift';
   return (
     <div
-      className="flex flex-col items-center gap-3 w-fit m-auto p-6 bg-slate-800 rounded-md"
+      className="flex flex-col items-center gap-3 relative w-fit m-auto p-6 bg-slate-800 rounded-md"
       ref={elementRef}
     >
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-3 relative">
+        {data.capsLock && (
+        <span className="absolute -top-4 -left-4 p-[.1em] bg-blue-400 rounded-full">
+          <CapsLockIcon className="w-4 text-slate-900" />
+        </span>
+        )}
         {showShift && (
         <>
           <Key keyStr="Shift" />

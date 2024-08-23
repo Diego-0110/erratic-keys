@@ -57,7 +57,8 @@ export default function KeyboardAndInput() {
     console.log('keydown', newKPInfo);
     if (swap && evt.code in keyboardConfig) {
       // Default character input needs to be replaced
-      if (evt.shiftKey && keyboardConfig[evt.code].shiftValue !== undefined) {
+      if (((evt.shiftKey && !evt.getModifierState('CapsLock')) || (evt.getModifierState('CapsLock') && !evt.shiftKey))
+        && keyboardConfig[evt.code].shiftValue !== undefined) {
         replacement.current = keyboardConfig[evt.code].shiftValue as string;
       } else {
         replacement.current = keyboardConfig[evt.code].value;
