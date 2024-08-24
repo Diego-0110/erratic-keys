@@ -5,9 +5,9 @@ import {
 } from 'react';
 import { KeyboardConfig } from '@/types';
 import KeyNotification, { KeyNotificationActions, KeyNotificationInfo } from './KeyNotification';
-import Textarea from './Textarea';
-import Option from './Option';
-import { SwapVertIcon } from './icons';
+import Textarea from '../common/Textarea';
+import Option from '../common/Option';
+import { SwapVertIcon } from '../common/icons';
 import useKBStore from '@/store';
 
 export const dfKeyboardConfig: KeyboardConfig = {
@@ -30,7 +30,7 @@ export const dfKeyboardConfig: KeyboardConfig = {
 
 export default function KeyboardAndInput() {
   const keyboardConfig = useKBStore((s) => s.keyboardConfig);
-  const swap = useKBStore((s) => s.config.swap);
+  const replace = useKBStore((s) => s.config.replace);
   const toggleSwap = useKBStore((s) => s.toggleSwap);
   // string (replace default with this) or null (use default input character)
   const replacement = useRef<(string | null)>(null);
@@ -55,7 +55,7 @@ export default function KeyboardAndInput() {
       capsLock: evt.getModifierState('CapsLock'),
     };
     console.log('keydown', newKPInfo);
-    if (swap && evt.code in keyboardConfig) {
+    if (replace && evt.code in keyboardConfig) {
       // Default character input needs to be replaced
       if (((evt.shiftKey && !evt.getModifierState('CapsLock')) || (evt.getModifierState('CapsLock') && !evt.shiftKey))
         && keyboardConfig[evt.code].shiftValue !== undefined) {
@@ -112,9 +112,9 @@ export default function KeyboardAndInput() {
   return (
     <section className="w-full max-w-4xl">
       <div className="mb-2">
-        <Option state={swap} onClick={toggleSwap}>
+        <Option state={replace} onClick={toggleSwap}>
           <SwapVertIcon className="inline-block w-4" />
-          Swap
+          Replace
         </Option>
       </div>
       <Textarea
@@ -124,7 +124,9 @@ export default function KeyboardAndInput() {
         onChange={handleChange}
         ref={textareaRef}
       />
-      <KeyNotification ref={keyNotificationRef} />
+      <div className="mt-1">
+        <KeyNotification ref={keyNotificationRef} />
+      </div>
     </section>
   );
 }

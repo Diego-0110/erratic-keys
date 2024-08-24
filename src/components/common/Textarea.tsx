@@ -1,26 +1,31 @@
+'use client';
+
 import {
-  forwardRef, useCallback, useMemo, useState,
+  forwardRef, useRef, useState,
 } from 'react';
 import { CheckCopyIcon, CopyIcon } from './icons';
 import { debounce } from '@/utils';
 
-type Props = React.TextareaHTMLAttributes<HTMLTextAreaElement>;
+interface Props extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
+  value: string
+}
 
 const Textarea = forwardRef((props: Props, ref: React.ForwardedRef<HTMLTextAreaElement>) => {
+  // Change icon when copy button is clicked
   const [copyBtnIcon, setCopyBtnIcon] = useState<React.ReactNode>(<CopyIcon className="w-4" />);
-  const aux = useMemo(() => debounce(() => setCopyBtnIcon(<CopyIcon className="w-4" />), 600), [setCopyBtnIcon]);
-  const debouncedClearBtnIcon = useCallback(aux, [aux]);
+  // Reset to default icon after 600ms with a debounce
+  const debouncedClearBtnIcon = useRef(debounce(() => setCopyBtnIcon(<CopyIcon className="w-4" />), 600));
   const handleClick = () => {
-    navigator.clipboard.writeText(props.value as string);
+    navigator.clipboard.writeText(props.value);
     setCopyBtnIcon(<CheckCopyIcon className="animate-[bounce_.6s_infinite] w-4 fill-blue-400" />);
-    debouncedClearBtnIcon();
+    debouncedClearBtnIcon.current();
   };
   return (
     <div className="relative">
       <textarea
         className="p-3 w-full bg-slate-800 border-[.1em] border-slate-600 focus:outline focus:outline-[.125em] focus:outline-offset-[.1em] focus:outline-blue-400 rounded-md [&::-webkit-scrollbar-corner]:bg-transparent"
         rows={4}
-      // eslint-disable-next-line react/jsx-props-no-spreading
+        // eslint-disable-next-line react/jsx-props-no-spreading
         {...props}
         id={props.id}
         ref={ref}

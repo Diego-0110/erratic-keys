@@ -35,8 +35,8 @@ interface ConfigSlice {
 const createConfigSlice: StateCreator<
 ConfigSlice, [], [], ConfigSlice
 > = (set) => ({
-  config: { swap: true },
-  toggleSwap: () => set((s) => ({ config: { ...s.config, swap: !s.config.swap } })),
+  config: { replace: true },
+  toggleSwap: () => set((s) => ({ config: { ...s.config, replace: !s.config.replace } })),
 });
 
 const useKBStore = create<KBConfigSlice & ConfigSlice>()(persist((...a) => ({

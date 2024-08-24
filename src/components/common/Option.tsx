@@ -15,6 +15,7 @@ export default function Option({
       type="button"
       className={`px-3 py-1 text-sm rounded-md hover:opacity-90 ${state ? activeStyles : disableStyles}`}
       onClick={onClick}
+      // TODO disable
     >
       {children}
     </button>

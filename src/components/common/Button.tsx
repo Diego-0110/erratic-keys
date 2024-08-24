@@ -8,7 +8,7 @@ const variantStyles = {
   primary: 'bg-blue-400 text-slate-900 font-semibold hover:opacity-90',
   secondary: 'bg-slate-600 text-slate-200 hover:opacity-90',
 };
-const disableStyles = 'bg-slate-400 text-slate-950';
+const disableStyles = 'bg-slate-400 text-slate-950 font-semibold';
 
 export default function Button({ children, variant = 'primary', ...props }: Props) {
   const activeStyles = variantStyles[variant];

@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 interface CustomProps {
-  label: string,
+  label: React.ReactNode,
 }
 
 type Props = CustomProps & React.InputHTMLAttributes<HTMLInputElement>;
@@ -10,7 +10,7 @@ export default function InputLabel({ label, id, ...props }: Props) {
     <div className="flex flex-col gap-1 my-2">
       <label
         htmlFor={id}
-        className={`text-sm ${props.disabled ? 'text-slate-400' : ''}`}
+        className={`text-sm${props.disabled ? ' text-slate-400' : ''}`}
       >
         {label}
       </label>

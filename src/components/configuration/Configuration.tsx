@@ -2,11 +2,11 @@
 
 import { useEffect, useState } from 'react';
 import { KeyConfig } from '@/types';
-import Key from './Key';
-import InputLabel from './InputLabel';
-import Button from './Button';
-import GroupOptions from './GroupOptions';
-import Option from './Option';
+import Key from '../common/Key';
+import InputLabel from '../common/InputLabel';
+import Button from '../common/Button';
+import GroupOptions from '../common/GroupOptions';
+import Option from '../common/Option';
 import useKBStore from '@/store';
 
 interface KeyData {
@@ -15,7 +15,6 @@ interface KeyData {
 }
 
 export default function Configuration() {
-  // TODO Caps Lock
   const keyboardConfig = useKBStore((s) => s.keyboardConfig);
   const setKeyConfig = useKBStore((s) => s.setKeyConfig);
   const removeKeyConfig = useKBStore((s) => s.removeKeyConfig);
@@ -66,7 +65,7 @@ export default function Configuration() {
         tabIndex={0}
         onKeyDown={handleKeyDown}
       >
-        <Key keyStr={keyData ? keyData.key : '?'} />
+        <Key>{keyData ? keyData.key : '?'}</Key>
         <span className="px-2 text-sm bg-slate-600 rounded-md">
           {keyData ? keyData.code : 'No key'}
         </span>

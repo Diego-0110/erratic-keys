@@ -1,7 +1,7 @@
 'use client';
 
-import KeyboardAndInput from '@/components/KeyboardAndInput';
-import ConfigurationDrawer from '@/components/ConfigurationDrawer';
+import KeyboardAndInput from '@/components/input/KeyboardAndInput';
+import ConfigurationDrawer from '@/components/configuration/ConfigurationDrawer';
 
 export default function Home() {
   return (
