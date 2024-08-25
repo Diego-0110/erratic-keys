@@ -1,5 +1,3 @@
-'use client';
-
 import KeyboardAndInput from '@/components/input/KeyboardAndInput';
 import ConfigurationDrawer from '@/components/configuration/ConfigurationDrawer';
 

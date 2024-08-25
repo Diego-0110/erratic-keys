@@ -1,3 +1,5 @@
+'use client';
+
 import { useEffect, useRef, useState } from 'react';
 import { ArrowDownIcon, SettingsIcon } from '../common/icons';
 import Configuration from './Configuration';
