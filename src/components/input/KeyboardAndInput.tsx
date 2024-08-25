@@ -3,35 +3,17 @@
 import {
   useLayoutEffect, useRef, useState,
 } from 'react';
-import { KeyboardConfig } from '@/types';
 import KeyNotification, { KeyNotificationActions, KeyNotificationInfo } from './KeyNotification';
 import Textarea from '../common/Textarea';
 import Option from '../common/Option';
 import { SwapVertIcon } from '../common/icons';
 import useKBStore from '@/store';
 
-export const dfKeyboardConfig: KeyboardConfig = {
-  KeyA: {
-    value: '😀',
-    shiftValue: '😁',
-  },
-  KeyK: {
-    value: '😅',
-    shiftValue: '🤣',
-  },
-  KeyY: {
-    value: '😪',
-    shiftValue: '😴',
-  },
-  KeyH: {
-    value: '😶‍🌫️',
-  },
-};
-
 export default function KeyboardAndInput() {
   const keyboardConfig = useKBStore((s) => s.keyboardConfig);
   const replace = useKBStore((s) => s.config.replace);
   const toggleSwap = useKBStore((s) => s.toggleSwap);
+
   // string (replace default with this) or null (use default input character)
   const replacement = useRef<(string | null)>(null);
   // Cursor position inside input
@@ -45,16 +27,10 @@ export default function KeyboardAndInput() {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [textareaValue, setTextareaValue] = useState<string>('');
 
+  // Actions set for KeyNotification element
   const keyNotificationRef = useRef<KeyNotificationActions>(null);
 
   const handleKeyDown = (evt: React.KeyboardEvent) => {
-    const newKPInfo: KeyNotificationInfo = {
-      code: evt.code,
-      key: evt.key,
-      shiftKey: evt.shiftKey,
-      capsLock: evt.getModifierState('CapsLock'),
-    };
-    console.log('keydown', newKPInfo);
     if (replace && evt.code in keyboardConfig) {
       // Default character input needs to be replaced
       if (((evt.shiftKey && !evt.getModifierState('CapsLock')) || (evt.getModifierState('CapsLock') && !evt.shiftKey))
@@ -66,6 +42,14 @@ export default function KeyboardAndInput() {
     } else { // Use default input
       replacement.current = null;
     }
+    // Key notification info
+    const newKPInfo: KeyNotificationInfo = {
+      code: evt.code,
+      key: evt.key,
+      shiftKey: evt.shiftKey,
+      capsLock: evt.getModifierState('CapsLock'),
+    };
+    // console.log('keydown', newKPInfo);
     if (replacement.current !== null) {
       newKPInfo.replacement = replacement.current;
     }
@@ -75,14 +59,13 @@ export default function KeyboardAndInput() {
     // Save cursor position before update (before input)
     // Browsers update the cursor position after changing the input's value, so
     //  when Change event is emitted the cursor position was already updated
-    console.log(evt.target.selectionStart, evt.target.selectionEnd);
-    // console.log('beforeInput', 'data' in evt && evt.data as string);
+    // console.log(evt.target.selectionStart, evt.target.selectionEnd);
     cursor.current.start = evt.target.selectionStart as number;
     cursor.current.end = evt.target.selectionEnd as number;
   };
   const handleChange = (evt: React.ChangeEvent<HTMLTextAreaElement>) => {
-    console.log(replacement.current);
-    console.log('change', cursor.current);
+    // console.log(replacement.current);
+    // console.log('change', cursor.current);
     if (replacement.current === null) { // Use default input
       cursor.current.start = evt.target.selectionStart as number;
       cursor.current.end = evt.target.selectionEnd as number;
@@ -100,7 +83,7 @@ export default function KeyboardAndInput() {
   };
 
   useLayoutEffect(() => {
-    console.log('effect', cursor.current);
+    // console.log('effect', cursor.current);
     // Update the real cursor position before browser repaints the screen
     // Only necessary when textare value is updated
     textareaRef.current?.setSelectionRange(
@@ -110,13 +93,11 @@ export default function KeyboardAndInput() {
   }, [textareaValue]);
 
   return (
-    <section className="w-full max-w-4xl">
-      <div className="mb-2">
-        <Option state={replace} onClick={toggleSwap}>
-          <SwapVertIcon className="inline-block w-4" />
-          Replace
-        </Option>
-      </div>
+    <section className="w-full max-w-4xl space-y-2">
+      <Option state={replace} onClick={toggleSwap}>
+        <SwapVertIcon className="inline-block w-4" />
+        Replace
+      </Option>
       <Textarea
         value={textareaValue}
         onKeyDown={handleKeyDown}
@@ -124,9 +105,7 @@ export default function KeyboardAndInput() {
         onChange={handleChange}
         ref={textareaRef}
       />
-      <div className="mt-1">
-        <KeyNotification ref={keyNotificationRef} />
-      </div>
+      <KeyNotification ref={keyNotificationRef} />
     </section>
   );
 }

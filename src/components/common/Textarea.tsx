@@ -12,14 +12,18 @@ interface Props extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
 
 const Textarea = forwardRef((props: Props, ref: React.ForwardedRef<HTMLTextAreaElement>) => {
   // Change icon when copy button is clicked
-  const [copyBtnIcon, setCopyBtnIcon] = useState<React.ReactNode>(<CopyIcon className="w-4" />);
+  const [copying, setCopying] = useState<boolean>(false);
   // Reset to default icon after 600ms with a debounce
-  const debouncedClearBtnIcon = useRef(debounce(() => setCopyBtnIcon(<CopyIcon className="w-4" />), 600));
+  const debouncedCopying = useRef(debounce(() => setCopying(false), 600));
   const handleClick = () => {
     navigator.clipboard.writeText(props.value);
-    setCopyBtnIcon(<CheckCopyIcon className="animate-[bounce_.6s_infinite] w-4 fill-blue-400" />);
-    debouncedClearBtnIcon.current();
+    setCopying(true);
+    debouncedCopying.current();
   };
+  const copyIcon = copying
+    ? <CheckCopyIcon className="animate-[ping_.6s_infinite] w-4 fill-blue-400" />
+    : <CopyIcon className="w-4" />;
+  const copyStyles = copying ? 'opacity-100' : 'opacity-30';
   return (
     <div className="relative">
       <textarea
@@ -32,10 +36,10 @@ const Textarea = forwardRef((props: Props, ref: React.ForwardedRef<HTMLTextAreaE
       />
       <button
         type="button"
-        className="absolute top-1 right-1 p-1 text-slate-300 bg-slate-800 border-[.1em] border-slate-600 rounded-md opacity-30 hover:opacity-100"
+        className={`absolute top-1 right-1 p-1 text-slate-300 bg-slate-800 border-[.1em] border-slate-600 rounded-md ${copyStyles} hover:opacity-100`}
         onClick={handleClick}
       >
-        {copyBtnIcon}
+        {copyIcon}
       </button>
     </div>
   );

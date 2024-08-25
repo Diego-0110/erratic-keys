@@ -13,12 +13,12 @@ export interface KeyNotificationInfo {
   replacement?: string
 }
 
-const newspaperSpinning = [
+const vanishAnimation = [
   { opacity: '100' },
   { opacity: '0' },
 ];
 
-const newspaperTiming = {
+const vanishTiming = {
   duration: 400,
   iterations: 1,
 };
@@ -34,13 +34,18 @@ const KeyNotification = forwardRef((
   const [data, setData] = useState<KeyNotificationInfo | null>(null);
   const elementRef = useRef<HTMLDivElement>(null);
   const animateRef = useRef<Animation | null>(null);
-  const debounceVanish = useRef<() => void>(debounce(() => {
-    animateRef.current = elementRef.current?.animate(newspaperSpinning, newspaperTiming) || null;
+
+  // Vanish animation with timeout of 1600ms and debounce
+  const debounceVanish = useRef(debounce(() => {
+    animateRef.current = elementRef.current?.animate(vanishAnimation, vanishTiming) || null;
     animateRef.current?.play();
   }, 1600));
-  const debounceDelete = useRef<() => void>(debounce(() => {
+  // Delete notification after 1990ms (2000ms opacity returns to 100%) with debounce
+  const debounceDelete = useRef(debounce(() => {
     setData(null);
   }, 1990));
+
+  // Definition of actions to forward
   useImperativeHandle(ref, () => ({
     setKeyInfo(keyInfo) {
       setData(keyInfo);
@@ -49,6 +54,7 @@ const KeyNotification = forwardRef((
       debounceDelete.current();
     },
   }), []);
+
   if (!data) {
     return null;
   }
