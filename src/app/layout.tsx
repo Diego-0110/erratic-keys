@@ -7,6 +7,9 @@ const inter = Inter({ subsets: ['latin'] });
 export const metadata: Metadata = {
   title: 'Erratic Keys',
   description: 'Create your custom keyboard.',
+  verification: {
+    google: 'RPYpFPenHcpGmt5H9U1uwOzYmC4huRVtRHKJzrnybe4',
+  },
 };
 
 export default function RootLayout({
