@@ -1,8 +1,9 @@
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
+import { Roboto_Mono } from 'next/font/google';
 import './globals.css';
+import { Keyboard } from '@/components/common/icons';
 
-const inter = Inter({ subsets: ['latin'] });
+const roboto = Roboto_Mono({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: 'Erratic Keys',
@@ -18,8 +19,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={inter.className}>{children}</body>
+    <html lang="en" className={roboto.className}>
+      <body className="min-h-[100dvh] text-slate-200 bg-slate-950">
+        <header className="py-2 px-4 border-b-2 border-b-slate-800">
+          <h1 className="font-bold text-lg">
+            <a href="/" className="flex items-center gap-2 w-fit">
+              <Keyboard className="text-blue-400 size-8" />
+              Erratic Keys
+            </a>
+          </h1>
+        </header>
+        <main className="p-4">
+          {children}
+        </main>
+      </body>
     </html>
   );
 }

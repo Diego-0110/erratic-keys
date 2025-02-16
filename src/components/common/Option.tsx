@@ -13,7 +13,7 @@ export default function Option({
   return (
     <button
       type="button"
-      className={`px-3 py-1 text-sm rounded-md ${!props.disabled ? 'hover:opacity-90 ' : ''}${state ? trueStyles : falseStyles}`}
+      className={`px-4 py-1 rounded-md [&_svg]:size-4 flex items-center gap-1 ${!props.disabled ? 'hover:opacity-90 ' : ''}${state ? trueStyles : falseStyles}`}
       onClick={onClick}
       // eslint-disable-next-line react/jsx-props-no-spreading
       {...props}

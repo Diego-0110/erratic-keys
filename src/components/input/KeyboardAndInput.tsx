@@ -3,10 +3,10 @@
 import {
   useLayoutEffect, useRef, useState,
 } from 'react';
+import { ArrowUpDown } from 'lucide-react';
 import KeyNotification, { KeyNotificationActions, KeyNotificationInfo } from './KeyNotification';
 import Textarea from '../common/Textarea';
 import Option from '../common/Option';
-import { SwapVertIcon } from '../common/icons';
 import useKBStore from '@/store';
 
 export default function KeyboardAndInput() {
@@ -93,11 +93,7 @@ export default function KeyboardAndInput() {
   }, [textareaValue]);
 
   return (
-    <section className="w-full max-w-4xl space-y-2">
-      <Option state={replace} onClick={toggleSwap}>
-        <SwapVertIcon className="inline-block w-4" />
-        Replace
-      </Option>
+    <section className="w-full space-y-1">
       <Textarea
         value={textareaValue}
         onKeyDown={handleKeyDown}
@@ -105,7 +101,13 @@ export default function KeyboardAndInput() {
         onChange={handleChange}
         ref={textareaRef}
       />
-      <KeyNotification ref={keyNotificationRef} />
+      <Option state={replace} onClick={toggleSwap}>
+        <ArrowUpDown />
+        Replace
+      </Option>
+      <div className="pt-4">
+        <KeyNotification ref={keyNotificationRef} />
+      </div>
     </section>
   );
 }

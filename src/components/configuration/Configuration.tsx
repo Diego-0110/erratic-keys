@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { PenLine } from 'lucide-react';
 import { KeyConfig } from '@/types';
 import Key from '../common/Key';
 import InputLabel from '../common/InputLabel';
@@ -125,6 +126,7 @@ export default function Configuration() {
           onClick={handleUpdateKeyConfig}
           disabled={!keyPressed}
         >
+          <PenLine />
           Update
         </Button>
       </div>

@@ -33,3 +33,13 @@ export function parseKeyboardConfig(obj: unknown): KeyboardConfig {
   });
   return obj as KeyboardConfig;
 }
+
+export async function getKeyFromKeyboardLayout(key: string) {
+  // This version of TypeScript has navigator.keyboard as undefined
+  const { keyboard } = navigator as { keyboard?: any };
+  if (typeof (keyboard) !== 'undefined') {
+    const keyboardLayout = await keyboard.getLayoutMap();
+    return keyboardLayout.get(key);
+  }
+  return key;
+}

@@ -1,7 +1,7 @@
 import {
   forwardRef, useImperativeHandle, useRef, useState,
 } from 'react';
-import { CapsLockIcon, SwapVertIcon } from '../common/icons';
+import { ArrowBigUpDash, ArrowUpDown } from 'lucide-react';
 import Key from '../common/Key';
 import { debounce } from '@/utils';
 
@@ -67,7 +67,7 @@ const KeyNotification = forwardRef((
       <div className="flex items-center gap-3 relative">
         {data.capsLock && (
         <span className="absolute -top-4 -left-4 p-[.1em] bg-blue-400 rounded-full">
-          <CapsLockIcon className="w-4 text-slate-900" />
+          <ArrowBigUpDash className="size-4 text-slate-900" />
         </span>
         )}
         {showShift && (
@@ -85,7 +85,7 @@ const KeyNotification = forwardRef((
       </div>
       {data.replacement !== undefined && (
       <>
-        <SwapVertIcon className="w-6" />
+        <ArrowUpDown className="size-6" />
         <p className="text-blue-400 font-bold">
           &quot;
           {data.replacement}

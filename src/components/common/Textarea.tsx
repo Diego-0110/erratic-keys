@@ -3,7 +3,7 @@
 import {
   forwardRef, useRef, useState,
 } from 'react';
-import { CheckCopyIcon, CopyIcon } from './icons';
+import { Clipboard, ClipboardCheck } from 'lucide-react';
 import { debounce } from '@/utils';
 
 interface Props extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
@@ -21,8 +21,8 @@ const Textarea = forwardRef((props: Props, ref: React.ForwardedRef<HTMLTextAreaE
     debouncedCopying.current();
   };
   const copyIcon = copying
-    ? <CheckCopyIcon className="animate-[ping_.6s_infinite] w-4 fill-blue-400" />
-    : <CopyIcon className="w-4" />;
+    ? <ClipboardCheck className="animate-[ping_.6s_infinite] size-4 fill-blue-400" />
+    : <Clipboard className="size-4" />;
   const copyStyles = copying ? 'opacity-100' : 'opacity-30';
   return (
     <div className="relative">

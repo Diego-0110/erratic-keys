@@ -3,9 +3,9 @@ import ConfigurationDrawer from '@/components/configuration/ConfigurationDrawer'
 
 export default function Home() {
   return (
-    <main className="flex min-h-[100dvh] flex-col items-center justify-between p-4 font-mono text-slate-200 bg-slate-950">
+    <div className="max-w-4xl mx-auto pb-6">
       <KeyboardAndInput />
       <ConfigurationDrawer />
-    </main>
+    </div>
   );
 }
