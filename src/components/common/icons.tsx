@@ -1,12 +1,9 @@
 /* eslint-disable react/jsx-props-no-spreading */
-interface Props {
-  className: string
-}
 
 // eslint-disable-next-line import/prefer-default-export
-export function Keyboard(props: Props) {
+export function Keyboard(props: React.SVGProps<SVGSVGElement>) {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" {...props} width="32" fill="currentColor" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" fill="currentColor" {...props} viewBox="0 0 24 24">
       <path d="M2 19V5h20v14zm6-3h8v-2H8zm-3-3h2v-2H5zm3 0h2v-2H8zm3 0h2v-2h-2zm3 0h2v-2h-2zm3 0h2v-2h-2zM5 10h2V8H5zm3 0h2V8H8zm3 0h2V8h-2zm3 0h2V8h-2zm3 0h2V8h-2z" />
     </svg>
   );

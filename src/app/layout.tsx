@@ -7,10 +7,15 @@ const roboto = Roboto_Mono({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: 'Erratic Keys',
-  description: 'Create your custom keyboard.',
+  description: 'Create your custom keyboard layout changing the output of every key.',
   verification: {
     google: 'RPYpFPenHcpGmt5H9U1uwOzYmC4huRVtRHKJzrnybe4',
   },
+  icons: [
+    {
+      url: '/icon?<generated>',
+    },
+  ],
 };
 
 export default function RootLayout({
